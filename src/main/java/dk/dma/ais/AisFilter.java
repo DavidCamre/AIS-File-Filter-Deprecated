@@ -6,33 +6,35 @@ import dk.dma.ais.filter.ExpressionFilter;
 
 public class AisFilter {
 
-	
-	
 	private ExpressionFilter expressionFilter;
-	private String type;
+	private String name;
 	private Date timeStart;
 	private Date timeEnd;
+	private FilterTypes type;
 
 	private int messageId;
 
-	public AisFilter(ExpressionFilter expressionFilter, String name) {
+	public AisFilter(ExpressionFilter expressionFilter, String name, FilterTypes type) {
 		super();
 		this.expressionFilter = expressionFilter;
-		this.type = name;
-	}
-
-	public AisFilter(ExpressionFilter expressionFilter, String type, int messageId) {
-		super();
-		this.expressionFilter = expressionFilter;
+		this.name = name;
 		this.type = type;
-		this.messageId = messageId;
 	}
 
-	public AisFilter(Date timeStart, Date timeEnd, String type) {
+	public AisFilter(ExpressionFilter expressionFilter, String name, int messageId, FilterTypes type) {
+		super();
+		this.expressionFilter = expressionFilter;
+		this.name = name;
+		this.messageId = messageId;
+		this.type = type;
+	}
+
+	public AisFilter(Date timeStart, Date timeEnd, String name) {
 		super();
 		this.timeStart = timeStart;
 		this.timeEnd = timeEnd;
-		this.type = type;
+		this.name = name;
+		this.type = FilterTypes.Time;
 	}
 
 	public ExpressionFilter getExpressionFilter() {
@@ -44,11 +46,11 @@ public class AisFilter {
 	}
 
 	public String getName() {
-		return type;
+		return name;
 	}
 
 	public void setType(String type) {
-		this.type = type;
+		this.name = type;
 	}
 
 	public Date getTimeStart() {
@@ -74,7 +76,5 @@ public class AisFilter {
 	public void setMessageId(int messageId) {
 		this.messageId = messageId;
 	}
-	
-	
 
 }

@@ -5,14 +5,16 @@ import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map.Entry;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import dk.dma.ais.binary.SixbitException;
-import dk.dma.ais.filter.ExpressionFilter;
 import dk.dma.ais.filter.IPacketFilter;
-import dk.dma.ais.message.AisBinaryMessage;
+import dk.dma.ais.message.AisMessage;
+import dk.dma.ais.message.AisMessage21;
 import dk.dma.ais.message.AisMessageException;
-import dk.dma.ais.message.binary.AisApplicationMessage;
+import dk.dma.ais.message.AisPositionMessage;
+import dk.dma.ais.message.AisStaticCommon;
 import dk.dma.ais.packet.AisPacket;
 import dk.dma.ais.reader.AisReader;
 import dk.dma.ais.reader.AisReaders;
@@ -26,10 +28,16 @@ public class AisParser implements Consumer<AisPacket> {
 	private Date timeEnd;
 	private PrintStream out;
 
+	private int messageCounter = 0;
+	private HashMapCounter<Integer> messageTypes = new HashMapCounter<>();
+	private HashMapCounter<Integer> mmsiCounter = new HashMapCounter<>();
+
 	public AisParser(String inputPath, ArrayList<AisFilter> inputFilters, String output)
 			throws InterruptedException, IOException {
 
-		out = new PrintStream(output);
+		if (output != null) {
+			out = new PrintStream(output);
+		}
 
 		AisReader reader = AisReaders.createReaderFromFile(inputPath);
 
@@ -52,6 +60,51 @@ public class AisParser implements Consumer<AisPacket> {
 
 	@Override
 	public void accept(AisPacket aisPackage) {
+
+		messageCounter++;
+
+		AisMessage aisMessage;
+		try {
+			aisMessage = aisPackage.getAisMessage();
+
+			if (aisMessage != null) {
+				int mmsi = aisMessage.getUserId();
+				mmsiCounter.add(mmsi);
+
+				// Handle AtoN message
+				if (aisMessage instanceof AisMessage21) {
+					AisMessage21 msg21 = (AisMessage21) aisMessage;
+
+				}
+				// Handle position messages 1,2 and 3 (class A) by using their
+				// shared
+				// parent
+				if (aisMessage instanceof AisPositionMessage) {
+					AisPositionMessage posMessage = (AisPositionMessage) aisMessage;
+				}
+
+				// Handle static reports for both class A and B vessels (msg 5 +
+				// 24)
+				if (aisMessage instanceof AisStaticCommon) {
+					AisStaticCommon staticMessage = (AisStaticCommon) aisMessage;
+				}
+			}
+		} catch (AisMessageException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (SixbitException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+
+		try {
+			if (aisPackage.getAisMessage() != null) {
+				messageTypes.add(aisPackage.getAisMessage().getMsgId());
+			}
+
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
 
 		for (IPacketFilter filter : filters) {
 			if (filter.rejectedByFilter(aisPackage)) {
@@ -88,8 +141,26 @@ public class AisParser implements Consumer<AisPacket> {
 				return;
 			}
 		}
-		out.print(aisPackage.getStringMessage() + "\r\n");
 
+		if (out != null) {
+			out.print(aisPackage.getStringMessage() + "\r\n");
+		}
+	}
+
+	public String getStatisticsData() {
+
+		String statisticsData = "<html>Statistics on file:<br>";
+		statisticsData = statisticsData + "Total Messages: " + messageCounter + "<br>";
+		for (Entry<Integer, Integer> messageType : messageTypes.entrySet()) {
+			statisticsData = statisticsData + "Message Type: " + messageType.getKey() + " counts: "
+					+ messageType.getValue() + "<br>";
+		}
+
+		System.out.println("Unique MMSI: " + mmsiCounter.size());
+		statisticsData = statisticsData + "Unique MMSI: " + mmsiCounter.size();
+
+		statisticsData = statisticsData + "<html>";
+		return statisticsData;
 	}
 
 }

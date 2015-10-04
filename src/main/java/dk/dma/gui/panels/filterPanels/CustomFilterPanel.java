@@ -6,6 +6,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextArea;
 
 import dk.dma.ais.AisFilter;
+import dk.dma.ais.FilterTypes;
 import dk.dma.ais.filter.ExpressionFilter;
 
 public class CustomFilterPanel extends JPanel implements FilterPanel {
@@ -26,7 +27,7 @@ public class CustomFilterPanel extends JPanel implements FilterPanel {
 		System.out.println(textArea.getText());
 		ExpressionFilter filter = new ExpressionFilter(textArea.getText());
 
-		AisFilter aisFilter = new AisFilter(filter, "Custom Expression " + textArea.getText());
+		AisFilter aisFilter = new AisFilter(filter, "Custom Expression " + textArea.getText(), FilterTypes.Custom);
 
 		return aisFilter;
 

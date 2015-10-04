@@ -28,12 +28,6 @@ public class AisStatistics implements Consumer<AisPacket> {
 
 	private AisReader reader;
 
-	// private int aCounts = 0;
-	// private int bCounts = 0;
-	// private int atonCounts = 0;
-	// private int unknownCounts = 0;
-	// private int baseStationCount = 0;
-
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		try {

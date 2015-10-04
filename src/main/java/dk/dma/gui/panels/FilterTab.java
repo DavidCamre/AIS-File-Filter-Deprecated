@@ -22,6 +22,7 @@ import javax.swing.JPanel;
 import javax.swing.border.TitledBorder;
 
 import dk.dma.ais.AisFilter;
+import dk.dma.ais.FilterTypes;
 import dk.dma.ais.filter.ExpressionFilter;
 import dk.dma.gui.AisFileParser;
 import dk.dma.gui.panels.filterPanels.BboxFilterPanel;
@@ -280,7 +281,8 @@ public class FilterTab extends JPanel implements ActionListener {
 
 					ExpressionFilter filter = new ExpressionFilter(expression);
 
-					AisFilter aisFilter = new AisFilter(filter, "Message Type Filter for " + expression);
+					AisFilter aisFilter = new AisFilter(filter, "Message Type Filter for " + expression,
+							FilterTypes.MessageTypes);
 					filters.add(aisFilter);
 				}
 

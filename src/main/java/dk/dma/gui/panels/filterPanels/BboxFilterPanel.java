@@ -9,6 +9,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import dk.dma.ais.AisFilter;
+import dk.dma.ais.FilterTypes;
 import dk.dma.ais.filter.ExpressionFilter;
 import dk.dma.ais.filter.LocationFilter;
 import dk.dma.enav.model.geometry.Area;
@@ -113,7 +114,7 @@ public class BboxFilterPanel extends JPanel implements FilterPanel {
 		ExpressionFilter filter = new ExpressionFilter("m.pos within bbox(" + topLeftLatitudeDouble + ","
 				+ topLeftLongitudeDouble + "," + bottomRightLatitudeDouble + "," + bottomRightLongitudeDouble + ")");
 
-		AisFilter aisFilter = new AisFilter(filter, "BBox Filter");
+		AisFilter aisFilter = new AisFilter(filter, "BBox Filter", FilterTypes.Geographic);
 
 		return aisFilter;
 

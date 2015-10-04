@@ -9,6 +9,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import dk.dma.ais.AisFilter;
+import dk.dma.ais.FilterTypes;
 import dk.dma.ais.filter.ExpressionFilter;
 
 public class CircleFilterPanel extends JPanel implements FilterPanel {
@@ -87,7 +88,7 @@ public class CircleFilterPanel extends JPanel implements FilterPanel {
 		ExpressionFilter filter = new ExpressionFilter(
 				"m.pos within circle(" + centerLatitudeDouble + "," + centerLongitudeDouble + "," + radius + ")");
 
-		AisFilter aisFilter = new AisFilter(filter, "Circle Filter");
+		AisFilter aisFilter = new AisFilter(filter, "Circle Filter", FilterTypes.Geographic);
 
 		return aisFilter;
 	}

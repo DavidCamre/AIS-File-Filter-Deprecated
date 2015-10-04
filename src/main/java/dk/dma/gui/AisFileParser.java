@@ -33,8 +33,7 @@ public class AisFileParser {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					
-					
+
 					AisFileParser window = new AisFileParser();
 					window.frmAisFileFilter.setVisible(true);
 				} catch (Exception e) {
@@ -47,6 +46,9 @@ public class AisFileParser {
 	public void loadStatistics() {
 		if (filePath != null) {
 			try {
+
+				AisParser aisParser = new AisParser(filePath, new ArrayList<>(), null);
+
 				AisStatistics statistics = new AisStatistics(filePath);
 				boolean statisticsAvailable = statistics.start();
 				if (statisticsAvailable) {

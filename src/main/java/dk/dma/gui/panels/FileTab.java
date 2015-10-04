@@ -22,6 +22,7 @@ public class FileTab extends JPanel {
 	private JLabel selectedFileLbl;
 
 	private AisFileParser aisFileParser;
+	private String lastPath = null;
 
 	/**
 	 * Create the panel.
@@ -57,11 +58,18 @@ public class FileTab extends JPanel {
 		add(btnSelectFile, gbc_btnSelectFile);
 		btnSelectFile.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				JFileChooser chooser = new JFileChooser();
+				JFileChooser chooser;
+				if (lastPath == null) {
+					chooser = new JFileChooser();
+
+				} else {
+					chooser = new JFileChooser(lastPath);
+				}
+
 				int returnVal = chooser.showOpenDialog(null);
 				if (returnVal == JFileChooser.APPROVE_OPTION) {
 					selectedFileLbl.setText(chooser.getSelectedFile().getAbsolutePath());
-					System.out.println("You chose to open this file: " + chooser.getSelectedFile().getName());
+					lastPath = chooser.getSelectedFile().getName();
 					aisFileParser.setFilePath(chooser.getSelectedFile().getAbsolutePath());
 				}
 			}
