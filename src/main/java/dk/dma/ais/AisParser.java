@@ -19,6 +19,7 @@ import dk.dma.ais.packet.AisPacket;
 import dk.dma.ais.reader.AisReader;
 import dk.dma.ais.reader.AisReaders;
 import dk.dma.ais.sentence.Vdm;
+import dk.dma.enav.model.geometry.Position;
 import dk.dma.enav.util.function.Consumer;
 
 public class AisParser implements Consumer<AisPacket> {
@@ -32,6 +33,14 @@ public class AisParser implements Consumer<AisPacket> {
 	private int messageCounter = 0;
 	private HashMapCounter<Integer> messageTypes = new HashMapCounter<>();
 	private HashMapCounter<Integer> mmsiCounter = new HashMapCounter<>();
+
+	private Date latestTimestamp = new Date(0);
+	private Date earliestTimestamp = new Date(new Date().getTime() * 2);
+
+	private double lowestLatitude = Double.MAX_VALUE;
+	private double lowestLongitude = Double.MAX_VALUE;
+	private double highestLatitude = Double.MIN_VALUE;
+	private double highestLongitude = Double.MIN_VALUE;
 
 	public AisParser(String inputPath, ArrayList<AisFilter> inputFilters, String output)
 			throws InterruptedException, IOException {
@@ -113,7 +122,25 @@ public class AisParser implements Consumer<AisPacket> {
 			out.print(aisPackage.getStringMessage() + "\r\n");
 		}
 
+		analysePackaget(aisPackage);
+	}
+
+	/**
+	 * Analyser part
+	 */
+	private void analysePackaget(AisPacket aisPackage) {
+
 		messageCounter++;
+
+		if (aisPackage.getTimestamp().before(earliestTimestamp)) {
+			earliestTimestamp = aisPackage.getTimestamp();
+		}
+
+		if (aisPackage.getTimestamp().after(latestTimestamp)) {
+			latestTimestamp = aisPackage.getTimestamp();
+		}
+
+		aisPackage.getTimestamp();
 
 		AisMessage aisMessage;
 		try {
@@ -122,6 +149,25 @@ public class AisParser implements Consumer<AisPacket> {
 			if (aisMessage != null) {
 				int mmsi = aisMessage.getUserId();
 				mmsiCounter.add(mmsi);
+
+				if (aisMessage.getValidPosition() != null) {
+					System.out.println("Position is " + aisMessage.getValidPosition());
+					if (aisMessage.getValidPosition().getLatitude() > highestLatitude) {
+						highestLatitude = aisMessage.getValidPosition().getLatitude();
+					}
+
+					if (aisMessage.getValidPosition().getLatitude() < lowestLatitude) {
+						lowestLatitude = aisMessage.getValidPosition().getLatitude();
+					}
+
+					if (aisMessage.getValidPosition().getLongitude() > highestLongitude) {
+						highestLongitude = aisMessage.getValidPosition().getLongitude();
+					}
+
+					if (aisMessage.getValidPosition().getLongitude() < lowestLongitude) {
+						lowestLongitude = aisMessage.getValidPosition().getLongitude();
+					}
+				}
 
 				// Handle AtoN message
 				if (aisMessage instanceof AisMessage21) {
@@ -157,9 +203,16 @@ public class AisParser implements Consumer<AisPacket> {
 		} catch (Exception e) {
 			// TODO: handle exception
 		}
+
+		// Statistics... Må gerne også indeholde extremes for geografiske
+		// koordinater samt. D
+		// Samme gælder tidsmæssigt.
 	}
 
 	public String getStatisticsData() {
+
+		Position topLeft = Position.create(highestLatitude, lowestLongitude);
+		Position bottomRight = Position.create(lowestLatitude, highestLongitude);
 
 		String statisticsData = "<html>Statistics on file:<br>";
 		statisticsData = statisticsData + "Total Messages: " + messageCounter + "<br>";
@@ -168,8 +221,13 @@ public class AisParser implements Consumer<AisPacket> {
 					+ messageType.getValue() + "<br>";
 		}
 
-		System.out.println("Unique MMSI: " + mmsiCounter.size());
-		statisticsData = statisticsData + "Unique MMSI: " + mmsiCounter.size();
+		statisticsData = statisticsData + "Unique MMSI: " + mmsiCounter.size() + "<br>";
+
+		statisticsData = statisticsData + "Date Range from: " + earliestTimestamp + "<br>";
+		statisticsData = statisticsData + "To: " + latestTimestamp + "<br>";
+
+		statisticsData = statisticsData + "<hr>";
+		statisticsData = statisticsData + "Bounding Box: <br>" + topLeft + " <br> " + bottomRight + "<br>";
 
 		statisticsData = statisticsData + "<html>";
 		return statisticsData;
