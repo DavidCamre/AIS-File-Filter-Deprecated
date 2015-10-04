@@ -27,6 +27,7 @@ public class AisParser implements Consumer<AisPacket> {
 	private Date startTime;
 	private Date timeEnd;
 	private PrintStream out;
+	private AisReader reader;
 
 	private int messageCounter = 0;
 	private HashMapCounter<Integer> messageTypes = new HashMapCounter<>();
@@ -39,7 +40,7 @@ public class AisParser implements Consumer<AisPacket> {
 			out = new PrintStream(output);
 		}
 
-		AisReader reader = AisReaders.createReaderFromFile(inputPath);
+		reader = AisReaders.createReaderFromFile(inputPath);
 
 		for (int i = 0; i < inputFilters.size(); i++) {
 			if (inputFilters.get(i).getName().equals("Time Filter")) {
@@ -53,13 +54,64 @@ public class AisParser implements Consumer<AisPacket> {
 
 		reader.registerPacketHandler(this);
 
-		reader.start();
-		reader.join();
+	}
 
+	public boolean start() {
+		try {
+			reader.start();
+			reader.join();
+
+			System.out.println("Returning true");
+
+			return true;
+		} catch (Exception e) {
+		}
+
+		return false;
 	}
 
 	@Override
 	public void accept(AisPacket aisPackage) {
+
+		for (IPacketFilter filter : filters) {
+			if (filter.rejectedByFilter(aisPackage)) {
+				// try {
+				// System.out.println("Rejecting Filter for message id " +
+				// aisPackage.getAisMessage().getMsgId());
+				// } catch (AisMessageException e) {
+				// // TODO Auto-generated catch block
+				// e.printStackTrace();
+				// } catch (SixbitException e) {
+				// // TODO Auto-generated catch block
+				// e.printStackTrace();
+				// }
+				return;
+			}
+		}
+
+		Vdm vdm = aisPackage.getVdm();
+		if (vdm == null) {
+			return;
+		}
+
+		// Maybe check for start date
+		Date timestamp = vdm.getTimestamp();
+		if (startTime != null && timestamp != null) {
+			if (timestamp.before(startTime)) {
+				return;
+			}
+		}
+
+		// Maybe check for end date
+		if (timeEnd != null && timestamp != null) {
+			if (timestamp.after(timeEnd)) {
+				return;
+			}
+		}
+
+		if (out != null) {
+			out.print(aisPackage.getStringMessage() + "\r\n");
+		}
 
 		messageCounter++;
 
@@ -104,46 +156,6 @@ public class AisParser implements Consumer<AisPacket> {
 
 		} catch (Exception e) {
 			// TODO: handle exception
-		}
-
-		for (IPacketFilter filter : filters) {
-			if (filter.rejectedByFilter(aisPackage)) {
-				// try {
-				// System.out.println("Rejecting Filter for message id " +
-				// aisPackage.getAisMessage().getMsgId());
-				// } catch (AisMessageException e) {
-				// // TODO Auto-generated catch block
-				// e.printStackTrace();
-				// } catch (SixbitException e) {
-				// // TODO Auto-generated catch block
-				// e.printStackTrace();
-				// }
-				return;
-			}
-		}
-
-		Vdm vdm = aisPackage.getVdm();
-		if (vdm == null) {
-			return;
-		}
-
-		// Maybe check for start date
-		Date timestamp = vdm.getTimestamp();
-		if (startTime != null && timestamp != null) {
-			if (timestamp.before(startTime)) {
-				return;
-			}
-		}
-
-		// Maybe check for end date
-		if (timeEnd != null && timestamp != null) {
-			if (timestamp.after(timeEnd)) {
-				return;
-			}
-		}
-
-		if (out != null) {
-			out.print(aisPackage.getStringMessage() + "\r\n");
 		}
 	}
 

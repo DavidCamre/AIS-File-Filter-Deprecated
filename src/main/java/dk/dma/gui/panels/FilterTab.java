@@ -32,8 +32,6 @@ import dk.dma.gui.panels.filterPanels.MessageTypeFilterPanel;
 import dk.dma.gui.panels.filterPanels.TimeFilterPanelPanel;
 
 public class FilterTab extends JPanel implements ActionListener {
-
-	private JLabel lblNoOutputFile;
 	private JComboBox<String> comboBox;
 
 	private BboxFilterPanel bboxFilterPanel = new BboxFilterPanel();
@@ -51,7 +49,7 @@ public class FilterTab extends JPanel implements ActionListener {
 	public FilterTab(AisFileParser aisFileParser) {
 		setBorder(new TitledBorder(null, "Filters", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		GridBagLayout gridBagLayout = new GridBagLayout();
-		gridBagLayout.columnWidths = new int[] { 50, 300, 0 };
+		gridBagLayout.columnWidths = new int[] { 200, 300, 0 };
 		gridBagLayout.rowHeights = new int[] { 0, 0, 0, 0, 0 };
 		gridBagLayout.columnWeights = new double[] { 0.0, 1.0, Double.MIN_VALUE };
 		gridBagLayout.rowWeights = new double[] { 0.0, 1.0, 0.0, 0.0, Double.MIN_VALUE };
@@ -235,22 +233,6 @@ public class FilterTab extends JPanel implements ActionListener {
 		gbl_selectOutputPanel.rowWeights = new double[] { 0.0, Double.MIN_VALUE };
 		selectOutputPanel.setLayout(gbl_selectOutputPanel);
 
-		lblNoOutputFile = new JLabel("No Output File Selected");
-		GridBagConstraints gbc_lblNoOutputFile = new GridBagConstraints();
-		gbc_lblNoOutputFile.fill = GridBagConstraints.HORIZONTAL;
-		gbc_lblNoOutputFile.insets = new Insets(0, 0, 0, 5);
-		gbc_lblNoOutputFile.gridx = 0;
-		gbc_lblNoOutputFile.gridy = 0;
-		selectOutputPanel.add(lblNoOutputFile, gbc_lblNoOutputFile);
-
-		JButton btnSelectOutput = new JButton("Select Output");
-		GridBagConstraints gbc_btnSelectOutput = new GridBagConstraints();
-		gbc_btnSelectOutput.anchor = GridBagConstraints.EAST;
-		gbc_btnSelectOutput.insets = new Insets(0, 0, 0, 5);
-		gbc_btnSelectOutput.gridx = 1;
-		gbc_btnSelectOutput.gridy = 0;
-		selectOutputPanel.add(btnSelectOutput, gbc_btnSelectOutput);
-
 		JButton btnApplyFilters = new JButton("Apply Filters");
 		btnApplyFilters.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -296,17 +278,6 @@ public class FilterTab extends JPanel implements ActionListener {
 		gbc_btnApplyFilters.gridy = 3;
 
 		add(btnApplyFilters, gbc_btnApplyFilters);
-		btnSelectOutput.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-
-				JFileChooser chooser = new JFileChooser();
-				int returnVal = chooser.showOpenDialog(null);
-				if (returnVal == JFileChooser.APPROVE_OPTION) {
-					lblNoOutputFile.setText(chooser.getSelectedFile().getAbsolutePath());
-					aisFileParser.setOutputPath(chooser.getSelectedFile().getAbsolutePath());
-				}
-			}
-		});
 		// TODO Auto-generated constructor stub
 	}
 

@@ -51,7 +51,7 @@ public class MessageTypeFilterPanel extends JPanel implements FilterPanel {
 		int messageFilter = comboBox.getSelectedIndex();
 		AisFilter aisFilter;
 		if (messageFilter == 0) {
-			ExpressionFilter filter = new ExpressionFilter("m.id in 1...5)");
+			ExpressionFilter filter = new ExpressionFilter("m.id in 1..5)");
 			aisFilter = new AisFilter(filter, "MSGs 1-5 (IWRAP)", messageFilter, FilterTypes.MessageTypes);
 		} else {
 			ExpressionFilter filter = new ExpressionFilter("m.id = " + messageFilter + ")");

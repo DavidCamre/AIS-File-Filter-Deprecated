@@ -5,14 +5,12 @@ import java.util.ArrayList;
 
 import javax.swing.JFrame;
 import javax.swing.JTabbedPane;
-import javax.swing.UIManager;
 
 import dk.dma.ais.AisFilter;
 import dk.dma.ais.AisParser;
-import dk.dma.ais.AisStatistics;
+import dk.dma.gui.panels.AnalyseTab;
 import dk.dma.gui.panels.FileTab;
 import dk.dma.gui.panels.FilterTab;
-import dk.dma.gui.panels.StatisticsTab;
 
 public class AisFileParser {
 
@@ -20,7 +18,7 @@ public class AisFileParser {
 
 	private JTabbedPane tabbedPane;
 	private FileTab fileTab;
-	private StatisticsTab statisticsTab;
+	private AnalyseTab statisticsTab;
 	private FilterTab filterTab;
 
 	private String filePath;
@@ -48,11 +46,9 @@ public class AisFileParser {
 			try {
 
 				AisParser aisParser = new AisParser(filePath, new ArrayList<>(), null);
-
-				AisStatistics statistics = new AisStatistics(filePath);
-				boolean statisticsAvailable = statistics.start();
+				boolean statisticsAvailable = aisParser.start();
 				if (statisticsAvailable) {
-					statisticsTab.setStatistics(statistics.getStatisticsData());
+					statisticsTab.setStatistics(aisParser.getStatisticsData());
 					frmAisFileFilter.repaint();
 				}
 			} catch (Exception e) {
@@ -68,6 +64,11 @@ public class AisFileParser {
 			System.out.println("Not null");
 			try {
 				AisParser aisParser = new AisParser(filePath, inputFilters, outputPath);
+				boolean statisticsAvailable = aisParser.start();
+				if (statisticsAvailable) {
+					statisticsTab.setStatistics(aisParser.getStatisticsData());
+					frmAisFileFilter.repaint();
+				}
 			} catch (Exception e) {
 				// TODO: handle exception
 				e.printStackTrace();
@@ -100,11 +101,11 @@ public class AisFileParser {
 		fileTab = new FileTab(this);
 		tabbedPane.addTab("File Select", null, fileTab, null);
 
-		statisticsTab = new StatisticsTab(this);
-		tabbedPane.addTab("Statistics", null, statisticsTab, null);
+		statisticsTab = new AnalyseTab(this);
+		tabbedPane.addTab("Analyse File", null, statisticsTab, null);
 
 		filterTab = new FilterTab(this);
-		tabbedPane.addTab("Filters", null, filterTab, null);
+		tabbedPane.addTab("Create Filters", null, filterTab, null);
 
 	}
 

@@ -13,15 +13,15 @@ import javax.swing.border.TitledBorder;
 
 import dk.dma.gui.AisFileParser;
 
-public class StatisticsTab extends JPanel {
+public class AnalyseTab extends JPanel {
 
 	private static final long serialVersionUID = 1L;
 	JLabel lblNoFileSelected;
 
 	AisFileParser aisFileParser;
 
-	public StatisticsTab(AisFileParser aisFileParser) {
-		setBorder(new TitledBorder(null, "File Statistics", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+	public AnalyseTab(AisFileParser aisFileParser) {
+		setBorder(new TitledBorder(null, "Analyse File", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 
 		this.aisFileParser = aisFileParser;
 
@@ -41,7 +41,7 @@ public class StatisticsTab extends JPanel {
 		gbc_lblNoFileSelected.gridy = 0;
 		add(lblNoFileSelected, gbc_lblNoFileSelected);
 
-		JButton btnLoadStatistics = new JButton("Load Statistics");
+		JButton btnLoadStatistics = new JButton("Analyse File");
 		btnLoadStatistics.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				aisFileParser.loadStatistics();
