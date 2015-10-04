@@ -5,6 +5,8 @@ import java.util.ArrayList;
 
 import javax.swing.JFrame;
 import javax.swing.JTabbedPane;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 
 import dk.dma.ais.AisFilter;
 import dk.dma.ais.AisParser;
@@ -90,6 +92,11 @@ public class AisFileParser {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
+		try {
+			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+		} catch (Exception e) {
+
+		}
 		frmAisFileFilter = new JFrame();
 		frmAisFileFilter.setTitle("AIS File Filter");
 		frmAisFileFilter.setBounds(100, 100, 500, 450);

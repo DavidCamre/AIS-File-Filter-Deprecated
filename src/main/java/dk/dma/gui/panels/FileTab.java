@@ -68,7 +68,7 @@ public class FileTab extends JPanel {
 				int returnVal = chooser.showOpenDialog(null);
 				if (returnVal == JFileChooser.APPROVE_OPTION) {
 					selectedFileLbl.setText(chooser.getSelectedFile().getAbsolutePath());
-					lastPath = chooser.getSelectedFile().getName();
+					lastPath = chooser.getSelectedFile().getPath();
 					aisFileParser.setFilePath(chooser.getSelectedFile().getAbsolutePath());
 				}
 			}
@@ -98,12 +98,13 @@ public class FileTab extends JPanel {
 				if (returnVal == JFileChooser.APPROVE_OPTION) {
 					lblNoOutputFile.setText(chooser.getSelectedFile().getAbsolutePath());
 					aisFileParser.setOutputPath(chooser.getSelectedFile().getAbsolutePath());
+					lastPath = chooser.getSelectedFile().getPath();
 				}
 			}
 		});
 		GridBagConstraints gbc_button = new GridBagConstraints();
 		gbc_button.fill = GridBagConstraints.HORIZONTAL;
-		gbc_button.gridx = 1;
+		gbc_button.gridx = 1;	
 		gbc_button.gridy = 2;
 		add(button, gbc_button);
 

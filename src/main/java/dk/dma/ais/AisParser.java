@@ -151,7 +151,6 @@ public class AisParser implements Consumer<AisPacket> {
 				mmsiCounter.add(mmsi);
 
 				if (aisMessage.getValidPosition() != null) {
-					System.out.println("Position is " + aisMessage.getValidPosition());
 					if (aisMessage.getValidPosition().getLatitude() > highestLatitude) {
 						highestLatitude = aisMessage.getValidPosition().getLatitude();
 					}
