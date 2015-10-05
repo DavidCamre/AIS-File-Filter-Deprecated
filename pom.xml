@@ -46,7 +46,7 @@
                             <transformer 
                                 implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer" />
 								           <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-										  <mainClass>dk.dma.gui.AisFileParser</mainClass>
+										  <mainClass>dk.dma.AisFileParser</mainClass>
 										</transformer>
                         </transformers> 
                         <filters>
@@ -83,7 +83,7 @@
                         <outfile>${project.build.directory}/ais-file-filter.exe</outfile>
                         <downloadUrl>http://java.com/download</downloadUrl>
                         <classPath>
-                            <mainClass>dk.dma.gui.AisFileParser</mainClass>
+                            <mainClass>dk.dma.AisFileParser</mainClass>
                             <preCp>anything</preCp>
                         </classPath>
                         <icon>src/main/resources/icons/favicon.ico</icon>

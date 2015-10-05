@@ -11,16 +11,16 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.border.TitledBorder;
 
-import dk.dma.gui.AisFileParser;
+import dk.dma.gui.MainGui;
 
 public class AnalyseTab extends JPanel {
 
 	private static final long serialVersionUID = 1L;
 	JLabel lblNoFileSelected;
 
-	AisFileParser aisFileParser;
+	MainGui aisFileParser;
 
-	public AnalyseTab(AisFileParser aisFileParser) {
+	public AnalyseTab(MainGui aisFileParser) {
 		setBorder(new TitledBorder(null, "Analyse File", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 
 		this.aisFileParser = aisFileParser;

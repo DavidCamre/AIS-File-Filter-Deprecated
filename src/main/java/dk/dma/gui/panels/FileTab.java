@@ -12,13 +12,13 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.TitledBorder;
 
-import dk.dma.gui.AisFileParser;
+import dk.dma.gui.MainGui;
 
 public class FileTab extends JPanel {
 	private static final long serialVersionUID = 1L;
 	private JLabel selectedFileLbl;
 
-	private AisFileParser aisFileParser;
+	private MainGui aisFileParser;
 	private JLabel lblNoOutputFile;
 	private String lastPath = null;
 
@@ -27,7 +27,7 @@ public class FileTab extends JPanel {
 	 * 
 	 * @param aisFileParser
 	 */
-	public FileTab(AisFileParser aisFileParser) {
+	public FileTab(MainGui aisFileParser) {
 		setBorder(new TitledBorder(null, "File Selector", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 
 		this.aisFileParser = aisFileParser;

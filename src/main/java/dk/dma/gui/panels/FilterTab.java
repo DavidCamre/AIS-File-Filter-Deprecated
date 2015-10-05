@@ -24,7 +24,7 @@ import javax.swing.border.TitledBorder;
 import dk.dma.ais.AisFilter;
 import dk.dma.ais.FilterTypes;
 import dk.dma.ais.filter.ExpressionFilter;
-import dk.dma.gui.AisFileParser;
+import dk.dma.gui.MainGui;
 import dk.dma.gui.panels.filterPanels.BboxFilterPanel;
 import dk.dma.gui.panels.filterPanels.CircleFilterPanel;
 import dk.dma.gui.panels.filterPanels.CustomFilterPanel;
@@ -46,7 +46,7 @@ public class FilterTab extends JPanel implements ActionListener {
 
 	private int selectedFilter = 0;
 
-	public FilterTab(AisFileParser aisFileParser) {
+	public FilterTab(MainGui aisFileParser) {
 		setBorder(new TitledBorder(null, "Filters", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		gridBagLayout.columnWidths = new int[] { 200, 300, 0 };

@@ -14,7 +14,7 @@ import dk.dma.gui.panels.AnalyseTab;
 import dk.dma.gui.panels.FileTab;
 import dk.dma.gui.panels.FilterTab;
 
-public class AisFileParser {
+public class MainGui {
 
 	private JFrame frmAisFileFilter;
 
@@ -25,23 +25,6 @@ public class AisFileParser {
 
 	private String filePath;
 	private String outputPath;
-
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-
-					AisFileParser window = new AisFileParser();
-					window.frmAisFileFilter.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
 
 	public void loadStatistics() {
 		if (filePath != null) {
@@ -84,8 +67,9 @@ public class AisFileParser {
 	/**
 	 * Create the application.
 	 */
-	public AisFileParser() {
+	public MainGui() {
 		initialize();
+		frmAisFileFilter.setVisible(true);
 	}
 
 	/**
