@@ -9,7 +9,7 @@ The project compiles to a runnable jar or an exe file to be used as a standalone
 
 * Java 8
 * Maven 3
-* 
+
 ## License ##
 
 This library is licensed under the Apache License, Version 2.0.
