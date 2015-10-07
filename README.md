@@ -13,3 +13,8 @@ The project compiles to a runnable jar or an exe file to be used as a standalone
 ## License ##
 
 This library is licensed under the Apache License, Version 2.0.
+
+## Disclaimer ##
+AIS-File-Filter uses the JxBrowser http://www.teamdev.com/jxbrowser, which is a proprietary software. The use of JxBrowser is governed by JxBrowser Product Licence Agreement http://www.teamdev.com/jxbrowser-licence-agreement. If you would like to use JxBrowser in your development, please contact TeamDev.
+
+
